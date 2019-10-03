@@ -1,0 +1,1 @@
+web: java -jar target/display-parameters-server-spring-boot.jar --spring.profiles.active=prod
