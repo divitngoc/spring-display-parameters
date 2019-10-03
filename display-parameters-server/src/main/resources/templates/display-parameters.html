@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<title>Display Parameters</title>
+
+<link rel="stylesheet"
+	th:href="@{webjars/bootstrap/4.2.1/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/css/main.css}" />
+
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+		<a class="navbar-brand" href="#">Parameters</a>
+	</nav>
+
+	<div role="main" class="container">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<td>Key</td>
+					<td>Value</td>
+					<td>Copy to Clipboard</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="p : ${parameters.keySet()}">
+					<td th:utext="${p}"></td>
+					<td th:utext="${parameters.get(p)}"></td>
+					<td>
+						<div class="container">
+							<input type="image" th:src="@{images/copy-content.svg}"
+								th:onclick="@{copyToClipboard('__(${parameters.get(p)})__');}"
+								width="30px" height="30px" />
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<script type="text/javascript"
+		th:src="@{webjars/bootstrap/4.2.1/js/bootstrap.min.js}">
+		
+	</script>
+	<script type="text/javascript">
+		function copyToClipboard(value) {
+			var el = document.createElement('textarea');
+			el.value = value;
+			document.body.appendChild(el);
+			el.select();
+			document.execCommand('copy');
+			document.body.removeChild(el);
+		}
+	</script>
+
+</body>
+</html>
