@@ -2,8 +2,7 @@ steps:
   - name: maven:3.6.0-jdk-11-slim
     entrypoint: 'mvn'
     args: ['-f', 'display-parameters-server', 'clean', 'install', '-DskipTests']
-
   - name: gcr.io/cloud-builders/docker
-    args: ['-f', 'display-parameters-server', 'build', '-t', 'gcr.io/$PROJECT_ID/display-parameters', '.' ]
+    args: ['--file=display-parameters-server/Dockerfile', 'build', '-t', 'gcr.io/$PROJECT_ID/display-parameters', '.' ]
 images:
-  - gcr.io/$PROJECT_ID/display-parameters
+  - 'gcr.io/$PROJECT_ID/display-parameters'
