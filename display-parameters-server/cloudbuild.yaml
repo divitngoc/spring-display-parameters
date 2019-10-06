@@ -3,6 +3,6 @@ steps:
     entrypoint: 'mvn'
     args: ['-f', 'display-parameters-server', 'clean', 'install', '-DskipTests']
   - name: gcr.io/cloud-builders/docker
-    args: ['--file=display-parameters-server/Dockerfile', 'build', '-t', 'gcr.io/$PROJECT_ID/display-parameters', '.' ]
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/display-parameters', '.' ]
 images:
   - 'gcr.io/$PROJECT_ID/display-parameters'
