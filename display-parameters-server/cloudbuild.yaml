@@ -6,7 +6,7 @@ steps:
   - name: gcr.io/cloud-builders/docker
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/display-parameters', 'display-parameters-server/' ]
   - name: gcr.io/cloud-builders/gcloud
-    args: [ compute, instance-vms, managed, rolling-action, restart, instance-micro]
+    args: [ compute, instance-groups, managed, rolling-action, restart, instance-group-one-micro]
 
 images:
   - 'gcr.io/$PROJECT_ID/display-parameters'
