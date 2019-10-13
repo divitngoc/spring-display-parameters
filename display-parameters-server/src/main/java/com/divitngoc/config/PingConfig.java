@@ -24,14 +24,14 @@ public class PingConfig {
 	@Value("${ping.url.health}")
 	private String healthUrl;
 	@Value("${ping.from}")
-	private LocalTime from;
+	private int fromHour;
 	@Value("${ping.to}")
-	private LocalTime to;
+	private int toHour;
 
 	@Scheduled(fixedDelay = 1000 * 60 * 25) // 25min
 	public void pingHealth() {
 		final LocalTime now = LocalTime.now(Clock.systemUTC());
-		if (now.isAfter(from) && now.isBefore(to)) {
+		if (now.isAfter(LocalTime.of(fromHour, 0)) && now.isBefore(LocalTime.of(toHour, 0))) {
 			log.info("Pinging health {}...", healthUrl);
 			pingService.pingEndpoint(healthUrl);
 		}
