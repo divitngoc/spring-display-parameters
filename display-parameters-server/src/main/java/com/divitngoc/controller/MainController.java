@@ -13,25 +13,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class MainController {
 
-	@GetMapping("/")
-	public String main(@RequestParam final MultiValueMap<String, String> duplicateRequestParams, final ModelMap model) {
-		System.out.println("Test: " + duplicateRequestParams);
-		final Map<String, String> uniqueRequestParams = new HashMap<>();
+    @GetMapping("/")
+    public String main(@RequestParam final MultiValueMap<String, String> multiValueMap, final ModelMap model) {
+        final Map<String, String> uniqueRequestParams = convertToUniqueRequestParams(multiValueMap);
 
-		Iterator<String> it = duplicateRequestParams.keySet().iterator();
-		while(it.hasNext()) {
-			String theKey = (String) it.next();
-			if (duplicateRequestParams.get(theKey).size() > 1) {
-				for (int index = 0; index < duplicateRequestParams.get(theKey).size(); index++) {
-					String duplicatedValue = duplicateRequestParams.get(theKey).get(index);
-					uniqueRequestParams.put(theKey + " ["+(index+1)+"]", duplicatedValue);
-				}
-			} else {
-				uniqueRequestParams.put(theKey, duplicateRequestParams.getFirst(theKey));
-			}
-		}
+        model.addAttribute("parameters", uniqueRequestParams);
+        return "display-parameters"; // view
+    }
 
-		model.addAttribute("parameters", uniqueRequestParams);
-		return "display-parameters"; // view
-	}
+    private Map<String, String> convertToUniqueRequestParams(MultiValueMap<String, String> multiValueMap) {
+        final Map<String, String> uniqueRequestParams = new HashMap<>();
+
+        Iterator<String> it = multiValueMap.keySet().iterator();
+        while (it.hasNext()) {
+            String key = it.next();
+            if (multiValueMap.get(key).size() > 1) {
+                for (int i = 0; i < multiValueMap.get(key).size(); i++) {
+                    String value = multiValueMap.get(key).get(i);
+                    uniqueRequestParams.put(key + " [" + (i + 1) + "]", value);
+                }
+            } else {
+                uniqueRequestParams.put(key, multiValueMap.getFirst(key));
+            }
+        }
+
+        return uniqueRequestParams;
+    }
 }
