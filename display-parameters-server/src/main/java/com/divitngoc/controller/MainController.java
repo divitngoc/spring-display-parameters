@@ -1,42 +1,26 @@
 package com.divitngoc.controller;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.net.URI;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Controller
 public class MainController {
 
-    @GetMapping("/")
-    public String main(@RequestParam final MultiValueMap<String, String> multiValueMap, final ModelMap model) {
-        final Map<String, String> uniqueRequestParams = convertToUniqueRequestParams(multiValueMap);
+	private final String redirectUrl = "https://display-parameters.com";
 
-        model.addAttribute("parameters", uniqueRequestParams);
-        return "display-parameters"; // view
-    }
+	@GetMapping("/")
+	public RedirectView main(@RequestParam final MultiValueMap<String, String> multiValueMap,
+			final HttpServletRequest request) {
+		URI uri = UriComponentsBuilder.fromHttpUrl(redirectUrl).queryParams(multiValueMap).build().toUri();
+		return new RedirectView(uri.toString());
+	}
 
-    private Map<String, String> convertToUniqueRequestParams(MultiValueMap<String, String> multiValueMap) {
-        final Map<String, String> uniqueRequestParams = new HashMap<>();
-
-        Iterator<String> it = multiValueMap.keySet().iterator();
-        while (it.hasNext()) {
-            String key = it.next();
-            if (multiValueMap.get(key).size() > 1) {
-                for (int i = 0; i < multiValueMap.get(key).size(); i++) {
-                    String value = multiValueMap.get(key).get(i);
-                    uniqueRequestParams.put(key + " [" + (i + 1) + "]", value);
-                }
-            } else {
-                uniqueRequestParams.put(key, multiValueMap.getFirst(key));
-            }
-        }
-
-        return uniqueRequestParams;
-    }
 }
