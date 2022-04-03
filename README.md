@@ -1,1 +1,1 @@
-# spring-display-parameters
+# spring-display-parameters (Project is deprecated)
